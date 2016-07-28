@@ -18,32 +18,17 @@ import (
 	"github.com/seletskiy/hierr"
 )
 
-var (
-	logger      = lorg.NewDiscarder()
-	funcRequest = request
-)
-
-// SetLogger for all package operations, you can be calm, nucleus-go doesn't
-// write anything unless you set logger.
-func SetLogger(log lorg.Logger) { logger = log }
-
 // User represents information about authentificated user.
 type User struct {
 	// Name of given user.
 	Name string `json:"username"`
+
 	// Info from remote OAuth service.
 	Info map[string]interface{} `json:"userinfo"`
+
 	// CreateDate of given user.
 	CreateDate int64 `json:"create_date"`
 }
-
-var (
-	address      = "_nucleus"
-	timeout      = time.Duration(0)
-	certificates = x509.NewCertPool()
-	retries      = 1
-	useragent    = "nucleus-go"
-)
 
 var (
 	// ErrInvalidToken describes that specified token is has been revoked or
@@ -51,21 +36,36 @@ var (
 	ErrInvalidToken = errors.New("token is invalid")
 )
 
-// ErrorMultiple is a set of errors that occurred during operations with
-// nucleus nodes.
-type ErrorMultiple []error
+var (
+	address      string
+	timeout      time.Duration
+	certificates *x509.CertPool
+	retries      int
+	useragent    string
 
-// Error returns string representation of multiple errors
-func (err ErrorMultiple) Error() string {
-	if len(err) == 1 {
-		return err[0].Error()
-	}
+	funcRequest func(*http.Client, string, string) (*User, error, bool)
+	logger      lorg.Logger
+)
 
-	top := errors.New("nucleus: multiple errors")
-	for _, nested := range err {
-		top = hierr.Push(top, nested)
-	}
-	return top.Error()
+// test purposes
+func reset() {
+	address = "_nucleus"
+	timeout = time.Duration(0)
+	certificates = x509.NewCertPool()
+	retries = 1
+	useragent = "nucleus-go"
+	funcRequest = request
+	logger = lorg.NewDiscarder()
+}
+
+func init() {
+	reset()
+}
+
+// SetLogger for all package operations, you can be calm, nucleus-go doesn't
+// write anything unless you set logger.
+func SetLogger(log lorg.Logger) {
+	logger = log
 }
 
 // AddCertificate decodes specified pem block,  parses certificate and add it
@@ -133,7 +133,8 @@ func Authentificate(token string) (*User, error) {
 	client := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
-				RootCAs: certificates,
+				RootCAs:            certificates,
+				InsecureSkipVerify: true,
 			},
 		},
 		Timeout: timeout,

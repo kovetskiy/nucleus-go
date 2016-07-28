@@ -1,7 +1,6 @@
 package nucleus
 
 import (
-	"crypto/x509"
 	"errors"
 	"io/ioutil"
 	"net/http"
@@ -20,6 +19,7 @@ func init() {
 }
 
 func TestGetRequest_UseSpecifiedHostnameAndToken(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	request, err := getRequest("foo", "bar")
@@ -31,6 +31,7 @@ func TestGetRequest_UseSpecifiedHostnameAndToken(t *testing.T) {
 }
 
 func TestGetRequest_UseSpecifiedUserAgent(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	SetUserAgent("xxx")
@@ -39,6 +40,7 @@ func TestGetRequest_UseSpecifiedUserAgent(t *testing.T) {
 }
 
 func TestGetAddresses_ResolveSRV(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	srv.Testing_RecordToResult = map[string][]string{
@@ -51,6 +53,7 @@ func TestGetAddresses_ResolveSRV(t *testing.T) {
 }
 
 func TestGetAddresses_ErrorIfCantResolve(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	_, err := getAddresses("_y")
@@ -58,6 +61,7 @@ func TestGetAddresses_ErrorIfCantResolve(t *testing.T) {
 }
 
 func TestGetAddresses_OneIfNotSRV(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	addresses, err := getAddresses("x")
@@ -66,6 +70,7 @@ func TestGetAddresses_OneIfNotSRV(t *testing.T) {
 }
 
 func TestSetAddress(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	SetAddress("blah")
@@ -73,6 +78,7 @@ func TestSetAddress(t *testing.T) {
 }
 
 func TestSetTimeout(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	SetTimeout(time.Minute)
@@ -80,6 +86,7 @@ func TestSetTimeout(t *testing.T) {
 }
 
 func TestSetRetries(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	SetRetries(50)
@@ -87,9 +94,9 @@ func TestSetRetries(t *testing.T) {
 }
 
 func TestAddCertificate_AddsToCertificatesPool(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
-	certificates = x509.NewCertPool()
 	err := AddCertificate([]byte(`-----BEGIN CERTIFICATE-----
 MIIDXTCCAkWgAwIBAgIJAIpyMnhsVvD3MA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNV
 BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
@@ -116,6 +123,7 @@ ng==
 }
 
 func TestAddCertificateFile_AddsToCertificatesPool(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	file, err := ioutil.TempFile(os.TempDir(), "")
@@ -146,13 +154,13 @@ ng==
 	test.NoError(file.Close())
 	defer os.Remove(file.Name())
 
-	certificates = x509.NewCertPool()
 	err = AddCertificateFile(file.Name())
 	test.NoError(err)
 	test.Len(certificates.Subjects(), 1)
 }
 
 func TestErrorMultiple_ReturnsAsIsIfOnlyOneError(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	err := ErrorMultiple{}
@@ -161,6 +169,7 @@ func TestErrorMultiple_ReturnsAsIsIfOnlyOneError(t *testing.T) {
 }
 
 func TestErrorMultiple_CreatesHierarchicalError(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	err := ErrorMultiple{}
@@ -174,6 +183,7 @@ func TestErrorMultiple_CreatesHierarchicalError(t *testing.T) {
 }
 
 func TestAuthentificate_DoRequestConsideringRetries(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	addresses := []string{}
@@ -220,6 +230,7 @@ func TestAuthentificate_DoRequestConsideringRetries(t *testing.T) {
 }
 
 func TestAuthentificate_ReturnsUser(t *testing.T) {
+	defer reset()
 	test := assert.New(t)
 
 	calls := 0
