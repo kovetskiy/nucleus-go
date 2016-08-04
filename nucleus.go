@@ -18,7 +18,7 @@ import (
 	"github.com/seletskiy/hierr"
 )
 
-// User represents information about authentificated user.
+// User represents information about authenticated user.
 type User struct {
 	// Name of given user.
 	Name string `json:"username"`
@@ -31,7 +31,7 @@ type User struct {
 }
 
 var (
-	// ErrInvalidToken describes that specified token is has been revoked or
+	// ErrInvalidToken describes that specified token has been revoked or
 	// just contains of information that doesn't seem like a nucleus token.
 	ErrInvalidToken = errors.New("token is invalid")
 )
@@ -62,13 +62,13 @@ func init() {
 	reset()
 }
 
-// SetLogger for all package operations, you can be calm, nucleus-go doesn't
+// SetLogger sets for all package operations, you can be calm, nucleus-go doesn't
 // write anything unless you set logger.
 func SetLogger(log lorg.Logger) {
 	logger = log
 }
 
-// AddCertificate decodes specified pem block,  parses certificate and add it
+// AddCertificate decodes specified pem block, parses certificate and adds it
 // to certificates pool
 func AddCertificate(pemData []byte) error {
 	pemBlock, _ := pem.Decode(pemData)
@@ -98,13 +98,13 @@ func AddCertificateFile(path string) error {
 	return AddCertificate(pemData)
 }
 
-// SetAddress of nucleus server that will be used for authentification
+// SetAddress of nucleus server that will be used for authentication
 // Default: _nucleus
 func SetAddress(nucleus string) {
 	address = nucleus
 }
 
-// SetTimeout for http operation including connection, any redirects,  reading
+// SetTimeout for http operation including connection, any redirects, reading
 // of response body.
 // Default: 0
 func SetTimeout(time time.Duration) {
@@ -123,8 +123,8 @@ func SetUserAgent(agent string) {
 	useragent = agent
 }
 
-// Authentificate user using specified authentification token.
-func Authentificate(token string) (*User, error) {
+// Authenticate user using specified authentication token.
+func Authenticate(token string) (*User, error) {
 	addresses, err := getAddresses(address)
 	if err != nil {
 		return nil, err

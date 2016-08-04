@@ -182,7 +182,7 @@ func TestErrorMultiple_CreatesHierarchicalError(t *testing.T) {
 	)
 }
 
-func TestAuthentificate_DoRequestConsideringRetries(t *testing.T) {
+func TestAuthenticate_DoRequestConsideringRetries(t *testing.T) {
 	defer reset()
 	test := assert.New(t)
 
@@ -206,7 +206,7 @@ func TestAuthentificate_DoRequestConsideringRetries(t *testing.T) {
 	SetRetries(3)
 	SetAddress("_x")
 
-	user, err := Authentificate("tok")
+	user, err := Authenticate("tok")
 	test.Nil(user)
 	test.EqualError(
 		err,
@@ -229,7 +229,7 @@ func TestAuthentificate_DoRequestConsideringRetries(t *testing.T) {
 	)
 }
 
-func TestAuthentificate_ReturnsUser(t *testing.T) {
+func TestAuthenticate_ReturnsUser(t *testing.T) {
 	defer reset()
 	test := assert.New(t)
 
@@ -246,7 +246,7 @@ func TestAuthentificate_ReturnsUser(t *testing.T) {
 	SetRetries(3)
 	SetAddress("host")
 
-	user, err := Authentificate("tok")
+	user, err := Authenticate("tok")
 	test.EqualValues(&User{Name: "wowow"}, user)
 	test.NoError(err)
 

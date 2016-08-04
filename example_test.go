@@ -91,7 +91,7 @@ func newNucleusServerMock() *httptest.Server {
 	return server
 }
 
-func ExampleAuthentificate() {
+func ExampleAuthenticate() {
 	server := newNucleusServerMock()
 	defer server.Close()
 
@@ -102,7 +102,7 @@ func ExampleAuthentificate() {
 
 	nucleus.SetAddress(server.URL)
 
-	user, err := nucleus.Authentificate("74cc1c60799e0a786ac7094b532f01b1")
+	user, err := nucleus.Authenticate("74cc1c60799e0a786ac7094b532f01b1")
 	if err != nil {
 		panic(err)
 	}
