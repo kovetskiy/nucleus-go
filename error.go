@@ -3,7 +3,7 @@ package nucleus
 import (
 	"errors"
 
-	"github.com/seletskiy/hierr"
+	"github.com/reconquest/hierr-go"
 )
 
 // ErrorMultiple is a set of errors that occurred during operations with
