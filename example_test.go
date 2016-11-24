@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/kovetskiy/nucleus-go"
+	"git.rn/devops/nucleus-go"
 )
 
 var certificate = []byte(`-----BEGIN CERTIFICATE-----

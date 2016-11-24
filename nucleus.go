@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/reconquest/srv-go"
 	"github.com/kovetskiy/lorg"
 	"github.com/reconquest/hierr-go"
+	"github.com/reconquest/srv-go"
 )
 
 // User represents information about authenticated user.

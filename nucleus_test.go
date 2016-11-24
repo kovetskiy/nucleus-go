@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/reconquest/srv-go"
 	"github.com/kovetskiy/lorg"
+	"github.com/reconquest/srv-go"
 	"github.com/stretchr/testify/assert"
 )
 
